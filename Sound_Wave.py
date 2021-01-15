@@ -86,24 +86,26 @@ class Sound_Wave:
                     elif(self.x > wall.get_creation_coordinates()[0][0] and self.x < wall.get_creation_coordinates()[0][1]):
                         k1 *= -1
 
+                    wave_wall_1: float = self.x
+                    wave_wall_2: float = self.x
 
-                    x01 = (wall.get_creation_coordinates()[1][0] / k1 - wall.get_creation_coordinates()[0][0]) * -1
-                    x02 = (wall.get_creation_coordinates()[1][1] / k2 - wall.get_creation_coordinates()[0][1]) * -1
+                    if (k1 != 0):
+                        x01 = (wall.get_creation_coordinates()[1][0] / k1 - wall.get_creation_coordinates()[0][0]) * -1
+                        wave_wall_1 = y[a] / k1 + x01
+                    if (k2 != 0):
+                        x02 = (wall.get_creation_coordinates()[1][1] / k2 - wall.get_creation_coordinates()[0][1]) * -1
+                        wave_wall_2 = y[a] / k2 + x02
 
-                    if (x[a] > (y[a] / k1 + x01) and x[a] < (y[a] / k2 + x02)):
-
-                        if (x[a] < ((y[a] / k1 + x01) + (((y[a] / k2 + x02)) - (y[a] / k1 + x01)) / 2)):
+                    if (x[a] > wave_wall_1 and x[a] < wave_wall_2):
+                        if (x[a] < (wave_wall_1) + (wave_wall_2 - wave_wall_1) / 2):
                             x[a] = wall.get_creation_coordinates()[0][0]
                         else:
                             x[a] = wall.get_creation_coordinates()[0][1]
 
                         y[a] = wall.y
-                        mas_walls_belongs:List[Wall] = []
 
-                        for wall_c in walls:
-                            if (wall_c.chek_belongs_point(self.x, self.y)):
-                                mas_walls_belongs.append(wall_c)
-                        if(mas_walls_belongs.count(wall)==0 and not wall.chek_celongs_wall(self)):
+                        if (wall.waves.count(self) == 0):
+                            wall.waves.append(self)
 
                             new_x:float
 
@@ -137,6 +139,7 @@ class Sound_Wave:
 
                     k1 *= -1
                     k2 *= -1
+
                     if (self.x > wall.get_creation_coordinates()[0][1]):
                         k1 *= -1
                         k2 *= -1
@@ -144,34 +147,26 @@ class Sound_Wave:
                           wall.get_creation_coordinates()[0][1]):
                         k1 *= -1
 
-                    x01 = (wall.get_creation_coordinates()[1][0] / k1 - wall.get_creation_coordinates()[0][0]) * -1
-                    x02 = (wall.get_creation_coordinates()[1][1] / k2 - wall.get_creation_coordinates()[0][1]) * -1
-
                     wave_wall_1: float = self.x
                     wave_wall_2: float = self.x
+
                     if (k1 != 0):
                         x01 = (wall.get_creation_coordinates()[1][0] / k1 - wall.get_creation_coordinates()[0][0]) * -1
                         wave_wall_1 = y[a] / k1 + x01
                     if (k2 != 0):
                         x02 = (wall.get_creation_coordinates()[1][1] / k2 - wall.get_creation_coordinates()[0][1]) * -1
-                        wave_wall_2 = k2*(x[a]-x02)
+                        wave_wall_2 = y[a] / k2 + x02
 
-                    if (y[a] >  wave_wall_1 and y[a] <  wave_wall_2):
-
-                        if (y[a] < (wave_wall_1) + (wave_wall_2 - wave_wall_1) / 2):
-                    if (x[a] > (y[a] / k1 + x01) and x[a] < (y[a] / k2 + x02)):
-                        if (x[a] < ((y[a] / k1 + x01) + (((y[a] / k2 + x02)) - (y[a] / k1 + x01)) / 2)):
+                    if (x[a] >  wave_wall_1 and x[a] <  wave_wall_2):
+                        if (x[a] < (wave_wall_1) + (wave_wall_2 - wave_wall_1) / 2):
                             x[a] = wall.get_creation_coordinates()[0][0]
                         else:
                             x[a] = wall.get_creation_coordinates()[0][1]
 
                         y[a] = wall.y
-                        mas_walls_belongs: List[Wall] = []
 
-                        for wall_c in walls:
-                            if (wall_c.chek_belongs_point(self.x, self.y)):
-                                mas_walls_belongs.append(wall_c)
-                        if (mas_walls_belongs.count(wall) == 0 and not wall.chek_celongs_wall(self)):
+                        if (wall.waves.count(self) == 0):
+                            wall.waves.append(self)
 
                             new_x: float
 
@@ -195,9 +190,9 @@ class Sound_Wave:
                                                    , Sound_Wave.Drawing.down)
                             new_wave2.move(walls, occurrence_rate,
                                            time - ((((self.y - wall.y)**2 + sy.Abs(new_x-self.x)**2)**0.5/ 335) * occurrence_rate * 10))
+
                 elif ((x[a] < wall.x and wall.type == Wall.Location.vertically and self.x > wall.x)):
-                    print(sy.Abs(self.y - wall.get_creation_coordinates()[1][0]),"/",
-                          sy.Abs(self.x - wall.get_creation_coordinates()[0][0]))
+
                     k1 = sy.Abs(self.y - wall.get_creation_coordinates()[1][0]) / sy.Abs(self.x - wall.get_creation_coordinates()[0][0])
 
                     k2 = sy.Abs(self.y - wall.get_creation_coordinates()[1][1]) / sy.Abs(self.x - wall.get_creation_coordinates()[0][1])
@@ -211,6 +206,7 @@ class Sound_Wave:
 
                     wave_wall_1: float = self.y
                     wave_wall_2: float = self.y
+
                     if (k1 != 0):
                         x01 = (wall.get_creation_coordinates()[1][0] / k1 - wall.get_creation_coordinates()[0][0]) * -1
                         wave_wall_1 = k1*(x[a]-x01)
@@ -256,6 +252,7 @@ class Sound_Wave:
                                                self.x - wall.x) ** 2) ** 0.5 / 335) * occurrence_rate * 10))
 
                 elif ((x[a] > wall.x and wall.type == Wall.Location.vertically and self.x < wall.x)):
+
                     k1 = sy.Abs(self.y - wall.get_creation_coordinates()[1][0]) / sy.Abs(
                         self.x - wall.get_creation_coordinates()[0][0])
 
@@ -264,18 +261,28 @@ class Sound_Wave:
 
                     k1 *= -1
                     k2 *= -1
-                    if (self.y < wall.y):
+                    if (self.y <= wall.get_creation_coordinates()[1][0]):
                         k1 *= -1
                         k2 *= -1
+                    elif (self.y > wall.get_creation_coordinates()[1][0] and self.y <
+                          wall.get_creation_coordinates()[1][1]):
+                        k2 *= -1
 
-                    x01 = (wall.get_creation_coordinates()[1][0] / k1 - wall.get_creation_coordinates()[0][0]) * -1
-                    x02 = (wall.get_creation_coordinates()[1][1] / k2 - wall.get_creation_coordinates()[0][1]) * -1
+                    wave_wall_1: float = self.y
+                    wave_wall_2: float = self.y
 
-                    print(y[a], ":", x[a])
-                    print(k1 * (x[a] - x01), "-", k2 * (x[a] - x02))
-                    if (y[a] > k1 * (x[a] - x01) and y[a] < k2 * (x[a] - x02)):
+                    if (k1 != 0):
+                        x01 = (wall.get_creation_coordinates()[1][0] / k1 - wall.get_creation_coordinates()[0][
+                            0]) * -1
+                        wave_wall_1 = k1 * (x[a] - x01)
+                    if (k2 != 0):
+                        x02 = (wall.get_creation_coordinates()[1][1] / k2 - wall.get_creation_coordinates()[0][
+                            1]) * -1
+                        wave_wall_2 = k2 * (x[a] - x02)
 
-                        if (y[a] < ((k1 * (x[a] - x01)) + ((k2 * (x[a] - x02)) - (k1 * (x[a] - x01))) / 2)):
+                    if (y[a] > wave_wall_1 and y[a] < wave_wall_2):
+
+                        if (y[a] < (wave_wall_1) + (wave_wall_2 - wave_wall_1) / 2):
                             y[a] = wall.get_creation_coordinates()[1][0]
                         else:
                             y[a] = wall.get_creation_coordinates()[1][1]
@@ -297,7 +304,7 @@ class Sound_Wave:
                             new_wave1 = Sound_Wave(wall.x, new_y
                                                    , []
                                                    , self.start_valume * wall.reflection_index
-                                                   , Sound_Wave.Drawing.right)
+                                                   , Sound_Wave.Drawing.left)
                             new_wave1.move(walls, occurrence_rate,
                                            time - ((((self.y - new_y) ** 2 + sy.Abs(
                                                self.x - wall.x) ** 2) ** 0.5 / 335) * occurrence_rate * 10))
@@ -305,49 +312,10 @@ class Sound_Wave:
                             new_wave2 = Sound_Wave(wall.x, new_y
                                                    , []
                                                    , self.start_valume * wall.entry_index
-                                                   , Sound_Wave.Drawing.left)
+                                                   , Sound_Wave.Drawing.right)
                             new_wave2.move(walls, occurrence_rate,
                                            time - ((((self.y - new_y) ** 2 + sy.Abs(
                                                self.x - wall.x) ** 2) ** 0.5 / 335) * occurrence_rate * 10))
-
-                    #     if (vx0 != room.walls[1].length):
-                    #         ball, = plt.plot([], [], '-', color='r',lw=sound_volume / 10)
-                    #         ball.set_data(circle_move(room.walls[1].length, vy0,
-                    #                                   sound_volume,
-                    #                                   time - (((room.walls[1].length-vx0)/335)*occurrence_rate*10)))
-                    # # if(vy0!=room.walls[0].length and not y2):
-                    #     ball, = plt.plot([], [], '-', color='r',lw=sound_volume / 10)
-                    #     ball.set_data(circle_move(vx0, room.walls[0].length,
-                    #                               sound_volume,
-                    #                               time - (((room.walls[0].length - vy0)/335)*occurrence_rate*10)))
-                    #     y2 = True
-
-                # if(y[a]<0):
-                #     y[a]=0
-                # if(vy0!=0 and not y1):
-                #     ball, = plt.plot([], [], '-', color='r', lw=sound_volume/ 10)
-                #     ball.set_data(circle_move(vx0, 0,
-                #                               sound_volume,
-                #                               time - ((vy0/335)*occurrence_rate*10)))
-                #     y1 = True
-
-                # if(x[a]>room.walls[1].length):
-                #     x[a]=room.walls[1].length
-                # if(vx0!=room.walls[1].length and not x2):
-                #     ball, = plt.plot([], [], '-', color='r',lw=sound_volume / 10)
-                #     ball.set_data(circle_move(room.walls[1].length, vy0,
-                #                               sound_volume,
-                #                               time - (((room.walls[1].length-vx0)/335)*occurrence_rate*10)))
-                #     x2 = True
-
-                # if(x[a]<0):
-                #     x[a]=0
-                # if(vx0!=0 and not x1):
-                #     ball, = plt.plot([], [], '-', color='r',lw=sound_volume / 10)
-                #     ball.set_data(circle_move(0, vy0,
-                #                               sound_volume,
-                #                               time - ((vx0/335)*occurrence_rate*10)))
-                #     x1 = True
 
         return x, y
 

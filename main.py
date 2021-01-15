@@ -41,9 +41,12 @@ def start_anim(occurrence_rate, width, height, sound_volume, x, y, walls:List[Wa
         wave.move(walls,occurrence_rate,i)
 
     ani = animation.FuncAnimation(fig, animate, frames=range(1,20), interval=500)
-    plt.show()
-    # ani.save('AntiHlop_Test004.gif')
+    # plt.show()
+    ani.save('AntiHlop_Test004.gif')
 
 
-walls = [Wall(3,3,4,0.7,0.3,Wall.Location.vertically)]
-start_anim(50,13,10,40,5,1,walls)
+walls = [Wall(4,3,4,0.7,0.3,Wall.Location.vertically),
+         Wall(10,3,4,0.7,0.3,Wall.Location.vertically),
+         Wall(7,1,4,0.7,0.3,Wall.Location.horizontally),
+         Wall(7,7,4,0.7,0.3,Wall.Location.horizontally)]
+start_anim(50,13,10,30,8,2,walls)

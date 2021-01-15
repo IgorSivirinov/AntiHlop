@@ -32,12 +32,12 @@ class Wall:
 
         self.waves = []
 
-        if ((x - (length/2) < 0 and Wall.Location.horizontally == type_loation)
-                and (y - (length/2) < 0 and Wall.Location.vertically == type_loation)):
+        if ((x - (length/2) <= 0 and Wall.Location.horizontally == type_loation)
+                and (y - (length/2) <= 0 and Wall.Location.vertically == type_loation)):
             raise Exception("Creation coordinates x and y cannot be less than zero")
-        elif (x - (length/2) < 0 and Wall.Location.horizontally == type_loation):
+        elif (x - (length/2) <= 0 and Wall.Location.horizontally == type_loation):
             raise Exception("Creation coordinate x cannot be less than zero")
-        elif (y - (length/2) < 0 and Wall.Location.vertically == type_loation):
+        elif (y - (length/2) <= 0 and Wall.Location.vertically == type_loation):
             raise Exception("Creation coordinate y cannot be less than zero")
 
     def get_creation_coordinates(self):
@@ -54,13 +54,6 @@ class Wall:
             return y==self.y and x>=self.get_creation_coordinates()[0][0] and x<=self.get_creation_coordinates()[0][1]
         else:
             return x==self.y and y>=self.get_creation_coordinates()[0][0] and y<=self.get_creation_coordinates()[0][1]
-
-    def chek_celongs_wall(self, wave):
-        for belongs_walls in self.waves:
-            if(wave.comparison(belongs_walls)):
-                return True
-        return False
-
 
     def comparison(self, obj):
         return (self.x == obj.x and

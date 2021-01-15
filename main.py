@@ -32,7 +32,7 @@ def start_anim(occurrence_rate, width, height, sound_volume, x, y, walls:List[Wa
     time_text = ax.text(0.05, 0.9, '', transform=ax.transAxes)
 
     for i in walls:
-        plt.plot(i.get_creation_coordinates()[0], i.get_creation_coordinates()[1], '-', color='k', lw=3)
+        plt.plot(i.get_creation_coordinates()[0], i.get_creation_coordinates()[1], '-', color='k', lw=5)
 
     def animate(i):
         wave = Sound_Wave(x,y,[],get_volume(((i*0.1)/occurrence_rate) * 335,(i*0.1)/occurrence_rate, E))
@@ -43,7 +43,7 @@ def start_anim(occurrence_rate, width, height, sound_volume, x, y, walls:List[Wa
     ani = animation.FuncAnimation(fig, animate, frames=range(1,20), interval=500)
     plt.show()
     # ani.save('AntiHlop_Test004.gif')
-walls = [Wall(5,5,2,0.7,0.3,Wall.Location.horizontally),
-         Wall(6,7,2,0.7,0.3,Wall.Location.horizontally),
-         Wall(3,6,2,0.7,0.3,Wall.Location.horizontally)]
-start_anim(50,10,10,40,7,3,walls)
+
+
+walls = [Wall(3,3,4,0.7,0.3,Wall.Location.vertically)]
+start_anim(50,13,10,40,5,1,walls)
